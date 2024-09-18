@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reorder Columns</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f4f4f4;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <table id="data-table">
+        <thead>
+            <tr>
+                <!-- Column headers will be inserted here dynamically -->
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data rows will be inserted here dynamically -->
+        </tbody>
+    </table>
+
+    <script>
+        // Generate dummy data
+        const generateData = (numRows) => {
+            const data = [];
+            for (let i = 0; i < numRows; i++) {
+                data.push({
+                    id: i + 1,
+                    name: 'Name ' + (i + 1),
+                    age: Math.floor(Math.random() * 60) + 20,
+                    city: 'City ' + (i % 10 + 1),
+                    occupation: 'Occupation ' + (i % 5 + 1)
+                });
+            }
+            return data;
+        };
+
+        const data = generateData(100);
+        let columns = ['id', 'name', 'age', 'city', 'occupation'];
+
+        // Function to render the table
+        const renderTable = (data, columns) => {
+            const tableHead = document.querySelector('#data-table thead tr');
+            const tableBody = document.querySelector('#data-table tbody');
+
+            // Clear existing table contents
+            tableHead.innerHTML = '';
+            tableBody.innerHTML = '';
+
+            // Render column headers
+            columns.forEach((col, index) => {
+                const th = document.createElement('th');
+                th.innerText = col;
+                th.draggable = true;
+                th.dataset.index = index;
+
+                // Add drag event listeners
+                th.addEventListener('dragstart', handleDragStart);
+                th.addEventListener('dragover', handleDragOver);
+                th.addEventListener('drop', handleDrop);
+
+                tableHead.appendChild(th);
+            });
+
+            // Render rows
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                columns.forEach(col => {
+                    const td = document.createElement('td');
+                    td.innerText = row[col];
+                    tr.appendChild(td);
+                });
+                tableBody.appendChild(tr);
+            });
+        };
+
+        // Drag and Drop functions
+        let draggedColumnIndex;
+
+        const handleDragStart = (e) => {
+            draggedColumnIndex = +e.target.dataset.index;
+        };
+
+        const handleDragOver = (e) => {
+            e.preventDefault();
+        };
+
+        const handleDrop = (e) => {
+            const targetIndex = +e.target.dataset.index;
+            moveColumn(columns, draggedColumnIndex, targetIndex);
+            renderTable(data, columns);
+        };
+
+        // Function to move a column from oldIndex to newIndex
+        const moveColumn = (columns, oldIndex, newIndex) => {
+            const column = columns.splice(oldIndex, 1)[0];
+            columns.splice(newIndex, 0, column);
+        };
+
+        // Initial render
+        renderTable(data, columns);
+    </script>
+</body>
+
+</html>
