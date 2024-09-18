@@ -1,0 +1,58 @@
+/* Basic reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.scroll-container {
+    width: 100%;
+    height: fit-content;
+    overflow: hidden;
+    white-space: nowrap;
+    border: 2px solid #000;
+    position: relative;
+    margin: 20px auto;
+}
+
+.box {
+    display: inline-block;
+    height: 200px;
+    width: 300px;
+    margin: 10px;
+    padding: 10px;
+    background-color: rgb(100, 100, 100);
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    line-height: 70px;
+    /* Center text vertically */
+    white-space: nowrap;
+}
+
+/* Animation for scrolling */
+.scroll-container .inner-container {
+    display: flex;
+    animation: scroll-left 10s linear infinite;
+}
+
+.scroll-container:hover .inner-container {
+    animation-play-state: paused;
+    /* Pause animation on hover */
+}
+
+/* Keyframes for scrolling left to right */
+@keyframes scroll-left {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
